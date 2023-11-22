@@ -3,7 +3,7 @@ package gornik.pl.klasy;
 import java.util.ArrayList;
 import java.util.List;
 
-class Hotel {
+public class Hotel {
     private String name;
     private String address;
     private int floors;
@@ -60,4 +60,6 @@ class Hotel {
         return staff;
     }
 
+    public void addReservation(Reservation reservation) {
+    }
 }
