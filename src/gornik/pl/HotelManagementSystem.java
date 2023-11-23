@@ -12,7 +12,7 @@ public class HotelManagementSystem {
         Hotel hotel = new Hotel("Zamek", "Tarnobrzeg", 3);
         HotelManager hotelManager = new HotelManager(hotel);
 
-        System.out.print("Podaj imię: ");
+        System.out.print("Podaj imię : ");
         String firstName = scanner.nextLine();
 
         System.out.print("Podaj nazwisko: ");

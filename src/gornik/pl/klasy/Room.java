@@ -11,6 +11,9 @@ public class Room {
         this.status = status;
     }
 
+    public Room(int roomNumber, RoomType roomType) {
+    }
+
     public int getNumber() {
         return number1;
     }
