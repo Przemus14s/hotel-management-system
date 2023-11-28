@@ -9,5 +9,4 @@ public class Staff {
         this.role = role;
     }
 
-    // Getters and setters
 }

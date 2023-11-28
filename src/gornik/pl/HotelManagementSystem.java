@@ -4,17 +4,17 @@ import gornik.pl.klasy.*;
 
 import java.util.List;
 import java.util.Scanner;
+
 public class HotelManagementSystem {
     public static void main(String[] args) {
-        Hotel hotel = new Hotel("Hotel ABC");
+
+        Hotel hotel = new Hotel("Zamek Lubelski");
 
         HotelMenager hotelManager = new HotelMenager(hotel);
 
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Podaj swoje imię: ");
-        String name = scanner.nextLine();
-        System.out.print("Podaj swój adres: ");
-        String address = scanner.nextLine();
+        String name = enterName(scanner);
+        String address = enterAddress(scanner);
 
         Guest guest = new Guest(name, address);
 
@@ -36,11 +36,15 @@ public class HotelManagementSystem {
         }
 
         if (selectedRoom != null) {
+
             Reservation reservation = new Reservation(guest, selectedRoom, numberOfNights);
 
-            addAdditionalServices(reservation);
+
+            addAdditionalServices(reservation, scanner);
+
 
             hotelManager.makeReservation(reservation);
+
 
             double totalPrice = reservation.calculateTotalPrice();
             System.out.println("Całkowita cena rezerwacji: " + totalPrice + " zł");
@@ -48,11 +52,31 @@ public class HotelManagementSystem {
             System.out.println("Brak dostępnych pokoi tego rodzaju.");
         }
 
+
         scanner.close();
     }
 
-    private static void addAdditionalServices(Reservation reservation) {
-        Scanner scanner = new Scanner(System.in);
+    private static String enterName(Scanner scanner) {
+        System.out.print("Podaj swoje imię: ");
+        while (!scanner.hasNext("[A-Za-z]+")) {
+            System.out.println("Nieprawidłowe imię. Spróbuj ponownie.");
+            System.out.print("Podaj swoje imię: ");
+            scanner.next();
+        }
+        return scanner.next();
+    }
+
+    private static String enterAddress(Scanner scanner) {
+        System.out.print("Podaj swój adres: ");
+        while (!scanner.hasNext("[A-Za-z0-9\\s]+")) {
+            System.out.println("Nieprawidłowy adres. Spróbuj ponownie.");
+            System.out.print("Podaj swój adres: ");
+            scanner.next();
+        }
+        return scanner.next();
+    }
+
+    private static void addAdditionalServices(Reservation reservation, Scanner scanner) {
         System.out.println("Dostępne dodatkowe usługi:");
         System.out.println("1. Jedzenie (200 zł za noc)");
         System.out.println("2. Masaż (200 zł za noc)");

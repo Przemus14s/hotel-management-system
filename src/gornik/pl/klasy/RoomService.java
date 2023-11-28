@@ -1,8 +1,5 @@
 package gornik.pl.klasy;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class RoomService {
     public static final Price DEFAULT_PRICE = new Price(200.0);
 

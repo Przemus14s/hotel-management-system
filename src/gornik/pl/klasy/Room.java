@@ -25,5 +25,4 @@ public class Room {
         this.reserved = false;
     }
 
-    // ... reszta kodu
 }

@@ -38,6 +38,5 @@ public class Reservation {
         return totalPrice;
     }
 
-    // Inne metody dostępowe (getters) i ustawiające (setters) w zależności od potrzeb
 }
 

@@ -13,7 +13,7 @@ public class Hotel {
         // Dodaj pokoje do hotelu
         this.rooms.add(new Room(1, RoomType.SINGLE));
         this.rooms.add(new Room(2, RoomType.DOUBLE));
-        // Dodaj więcej pokoi, jeśli to konieczne
+
     }
 
     public List<Room> getAvailableRooms() {
