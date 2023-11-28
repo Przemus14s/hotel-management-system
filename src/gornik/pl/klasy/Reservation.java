@@ -1,57 +1,43 @@
 package gornik.pl.klasy;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Reservation {
     private Guest guest;
     private Room room;
-    private String checkInDate;
-    private String checkOutDate;
+    private int numberOfNights;
+    private List<RoomService> roomServices;
 
-    public Reservation(Guest guest, Room room, String checkInDate, String checkOutDate) {
+    public Reservation(Guest guest, Room room, int numberOfNights) {
         this.guest = guest;
         this.room = room;
-        this.checkInDate = checkInDate;
-        this.checkOutDate = checkOutDate;
-    }
-    public Guest getGuest() {
-        return guest;
-    }
-
-    public void setGuest(Guest guest) {
-        this.guest = guest;
+        this.numberOfNights = numberOfNights;
+        this.roomServices = new ArrayList<>();
     }
 
     public Room getRoom() {
         return room;
     }
 
-    public void setRoom(Room room) {
-        this.room = room;
+    public void addRoomService(RoomService roomService) {
+        roomServices.add(roomService);
     }
 
-    public String getCheckInDate() {
-        return checkInDate;
+    public double calculateTotalPrice() {
+        Price roomPrice = room.getRoomType().getPrice();
+        double roomServicesPrice = calculateRoomServicesPrice();
+        return (roomPrice.getAmount() * numberOfNights) + roomServicesPrice;
     }
 
-    public void setCheckInDate(String checkInDate) {
-        this.checkInDate = checkInDate;
+    private double calculateRoomServicesPrice() {
+        double totalPrice = 0.0;
+        for (RoomService roomService : roomServices) {
+            totalPrice += roomService.getPrice().getAmount();
+        }
+        return totalPrice;
     }
 
-    public String getCheckOutDate() {
-        return checkOutDate;
-    }
-
-    public void setCheckOutDate(String checkOutDate) {
-        this.checkOutDate = checkOutDate;
-    }
-
-    @Override
-    public String toString() {
-        return "Reservation{" +
-                "guest=" + guest +
-                ", room=" + room +
-                ", checkInDate=" + checkInDate +
-                ", checkOutDate=" + checkOutDate +
-                '}';
-    }
+    // Inne metody dostępowe (getters) i ustawiające (setters) w zależności od potrzeb
 }
 

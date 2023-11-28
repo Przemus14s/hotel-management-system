@@ -1,25 +1,13 @@
 package gornik.pl.klasy;
 
-class Staff {
-    private int staffId;
+public class Staff {
     private String name;
-    private String position;
+    private String role;
 
-    public Staff(int staffId, String name, String position) {
-        this.staffId = staffId;
+    public Staff(String name, String role) {
         this.name = name;
-        this.position = position;
+        this.role = role;
     }
 
-    public int getStaffId() {
-        return staffId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getPosition() {
-        return position;
-    }
+    // Getters and setters
 }

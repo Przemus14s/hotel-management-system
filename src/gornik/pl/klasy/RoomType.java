@@ -1,18 +1,16 @@
 package gornik.pl.klasy;
 
 public enum RoomType {
-    SINGLE("Single Room"),
-    DOUBLE("Double Room"),
-    SUITE("Suite");
+    SINGLE(new Price(100.0)), // Cena za dzień dla pokoju jednoosobowego
+    DOUBLE(new Price(150.0)); // Cena za dzień dla pokoju dwuosobowego
 
-    private final String displayName;
+    private Price price;
 
-    RoomType(String displayName) {
-        this.displayName = displayName;
+    RoomType(Price price) {
+        this.price = price;
     }
 
-    public String getDisplayName() {
-        return displayName;
+    public Price getPrice() {
+        return price;
     }
-
 }

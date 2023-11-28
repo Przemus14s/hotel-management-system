@@ -4,49 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RoomService {
-    private List<Order> orders;
+    public static final Price DEFAULT_PRICE = new Price(200.0);
 
-    public RoomService() {
-        this.orders = new ArrayList<>();
+    private String serviceName;
+    private Price price;
+
+    public RoomService(String serviceName) {
+        this.serviceName = serviceName;
+        this.price = DEFAULT_PRICE;
     }
 
-    public void placeOrder(Guest guest, String item, double price) {
-        Order order = new Order(guest, item, price);
-        orders.add(order);
-        System.out.println("Zamówienie dla " + guest.getFirstName() + " " + guest.getLastName() +
-                " przyjęte. Pozycja: " + item + ", Cena: " + price + " zł.");
-    }
-
-    public void displayOrderHistory() {
-        System.out.println("Historia zamówień obsługi pokojowej:");
-        for (Order order : orders) {
-            System.out.println("Gość: " + order.getGuest().getFirstName() + " " + order.getGuest().getLastName() +
-                    ", Zamówienie: " + order.getItem() +
-                    ", Cena: " + order.getPrice() + " zł.");
-        }
-    }
-
-    private static class Order {
-        private Guest guest;
-        private String item;
-        private double price;
-
-        public Order(Guest guest, String item, double price) {
-            this.guest = guest;
-            this.item = item;
-            this.price = price;
-        }
-
-        public Guest getGuest() {
-            return guest;
-        }
-
-        public String getItem() {
-            return item;
-        }
-
-        public double getPrice() {
-            return price;
-        }
+    public Price getPrice() {
+        return price;
     }
 }
