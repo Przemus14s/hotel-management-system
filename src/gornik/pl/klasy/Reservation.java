@@ -7,12 +7,14 @@ public class Reservation {
     private Guest guest;
     private Room room;
     private int numberOfNights;
+    private Parking parking;
     private List<RoomService> roomServices;
 
-    public Reservation(Guest guest, Room room, int numberOfNights) {
+    public Reservation(Guest guest, Room room, int numberOfNights, Parking parking) {
         this.guest = guest;
         this.room = room;
         this.numberOfNights = numberOfNights;
+        this.parking = parking;
         this.roomServices = new ArrayList<>();
     }
 
@@ -24,10 +26,15 @@ public class Reservation {
         roomServices.add(roomService);
     }
 
+    public void addParking(Parking parking) {
+        this.parking = parking;
+    }
+
     public double calculateTotalPrice() {
         Price roomPrice = room.getRoomType().getPrice();
         double roomServicesPrice = calculateRoomServicesPrice();
-        return (roomPrice.getAmount() * numberOfNights) + roomServicesPrice;
+        double parkingCost = parking.isIncluded() ? parking.getCost() : 0.0;
+        return (roomPrice.getAmount() * numberOfNights) + roomServicesPrice + parkingCost;
     }
 
     private double calculateRoomServicesPrice() {
@@ -37,6 +44,4 @@ public class Reservation {
         }
         return totalPrice;
     }
-
 }
-

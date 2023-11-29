@@ -7,9 +7,7 @@ import java.util.Scanner;
 
 public class HotelManagementSystem {
     public static void main(String[] args) {
-
         Hotel hotel = new Hotel("Zamek Lubelski");
-
         HotelMenager hotelManager = new HotelMenager(hotel);
 
         Scanner scanner = new Scanner(System.in);
@@ -22,36 +20,27 @@ public class HotelManagementSystem {
         int roomChoice = scanner.nextInt();
         RoomType roomType = (roomChoice == 1) ? RoomType.SINGLE : RoomType.DOUBLE;
 
-        System.out.print("Podaj liczbę nocy: ");
-        int numberOfNights = scanner.nextInt();
-
-
         List<Room> availableRooms = hotel.getAvailableRooms();
-        Room selectedRoom = null;
-        for (Room room : availableRooms) {
-            if (room.getRoomType() == roomType) {
-                selectedRoom = room;
-                break;
-            }
-        }
+        Room selectedRoom = findAvailableRoom(availableRooms, roomType);
 
         if (selectedRoom != null) {
+            System.out.print("Podaj liczbę nocy: ");
+            int numberOfNights = scanner.nextInt();
 
-            Reservation reservation = new Reservation(guest, selectedRoom, numberOfNights);
+            Parking parking = new Parking(false);
+            parking.askForParking(scanner);
 
+            Reservation reservation = new Reservation(guest, selectedRoom, numberOfNights, parking);
 
             addAdditionalServices(reservation, scanner);
 
-
             hotelManager.makeReservation(reservation);
-
 
             double totalPrice = reservation.calculateTotalPrice();
             System.out.println("Całkowita cena rezerwacji: " + totalPrice + " zł");
         } else {
             System.out.println("Brak dostępnych pokoi tego rodzaju.");
         }
-
 
         scanner.close();
     }
@@ -74,6 +63,15 @@ public class HotelManagementSystem {
             scanner.next();
         }
         return scanner.next();
+    }
+
+    private static Room findAvailableRoom(List<Room> availableRooms, RoomType roomType) {
+        for (Room room : availableRooms) {
+            if (room.getRoomType() == roomType && !room.isReserved()) {
+                return room;
+            }
+        }
+        return null;
     }
 
     private static void addAdditionalServices(Reservation reservation, Scanner scanner) {
@@ -102,4 +100,3 @@ public class HotelManagementSystem {
         }
     }
 }
-
