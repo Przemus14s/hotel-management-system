@@ -3,11 +3,11 @@ package gornik.pl.klasy;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HotelMenager {
+public class HotelManager {
     private Hotel hotel;
     private List<Reservation> reservations;
 
-    public HotelMenager(Hotel hotel) {
+    public HotelManager(Hotel hotel) {
         this.hotel = hotel;
         this.reservations = new ArrayList<>();
     }

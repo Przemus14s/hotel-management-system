@@ -10,9 +10,11 @@ public class Room {
         this.roomType = roomType;
         this.reserved = false;
     }
+
     public RoomType getRoomType() {
         return roomType;
     }
+
     public boolean isReserved() {
         return reserved;
     }
@@ -25,4 +27,7 @@ public class Room {
         this.reserved = false;
     }
 
+    public int getRoomNumber() {
+        return roomNumber;
+    }
 }

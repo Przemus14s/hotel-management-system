@@ -8,61 +8,221 @@ import java.util.Scanner;
 public class HotelManagementSystem {
     public static void main(String[] args) {
         Hotel hotel = new Hotel("Zamek Lubelski");
-        HotelMenager hotelManager = new HotelMenager(hotel);
+        HotelManager hotelManager = new HotelManager(hotel);
+        GuestList guestList = createGuestListWith20Guests();
 
         Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("---------------------------------");
+            System.out.println("Menu:");
+            System.out.println("1. Dodaj nowego gościa");
+            System.out.println("2. Zarezerwuj pokój");
+            System.out.println("3. Modyfikuj lub usuń gościa");
+            System.out.println("4. Wyświetl listę gości");
+            System.out.println("0. Zakończ program");
+            System.out.println("---------------------------------");
+
+            System.out.print("Wybierz opcję: ");
+            int choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    addNewGuest(scanner, guestList);
+                    break;
+                case 2:
+                    makeReservation(scanner, hotel, hotelManager, guestList);
+                    break;
+                case 3:
+                    modifyOrRemoveGuest(scanner, guestList);
+                    break;
+                case 4:
+                    displayGuestList(guestList);
+                    break;
+                case 0:
+                    System.out.println("Program zakończony.");
+                    scanner.close();
+                    System.exit(0);
+                default:
+                    System.out.println("Nieprawidłowa opcja. Spróbuj ponownie.");
+            }
+        }
+    }
+
+    private static GuestList createGuestListWith20Guests() {
+        GuestList guestList = new GuestList();
+        guestList.addGuest(new Guest("Anna", "Gdańsk"));
+        guestList.addGuest(new Guest("Jan", "Rzeszów"));
+        guestList.addGuest(new Guest("Katarzyna", "Wrocław"));
+        guestList.addGuest(new Guest("Piotr", "Trzcina"));
+        guestList.addGuest(new Guest("Magdalena", "Zakopane"));
+        guestList.addGuest(new Guest("Grzegorz", "Warszawa"));
+        guestList.addGuest(new Guest("Agnieszka", "Kraków"));
+        guestList.addGuest(new Guest("Krzysztof", "Gniezno"));
+        guestList.addGuest(new Guest("Joanna", "Poznań"));
+        guestList.addGuest(new Guest("Marek", "Lublin"));
+        guestList.addGuest(new Guest("Ewa", "Skrzypaczowice"));
+        guestList.addGuest(new Guest("Tomasz", "Gorzyce"));
+        guestList.addGuest(new Guest("Karolina", "Koprzywnica"));
+        guestList.addGuest(new Guest("Artur", "Tarnobrzeg"));
+        guestList.addGuest(new Guest("Monika", "Zator"));
+        guestList.addGuest(new Guest("Rafał", "Krosno"));
+        guestList.addGuest(new Guest("Beata", "Izdebki"));
+        guestList.addGuest(new Guest("Wojciech", "Sokołow"));
+        guestList.addGuest(new Guest("Mariola", "Stale"));
+        guestList.addGuest(new Guest("Dariusz", "Kacperkowo"));
+
+        return guestList;
+    }
+
+    private static void addNewGuest(Scanner scanner, GuestList guestList) {
         String name = enterName(scanner);
         String address = enterAddress(scanner);
 
-        Guest guest = new Guest(name, address);
-
-        System.out.print("Wybierz rodzaj pokoju (1 - jednoosobowy, 2 - dwuosobowy): ");
-        int roomChoice = scanner.nextInt();
-        RoomType roomType = (roomChoice == 1) ? RoomType.SINGLE : RoomType.DOUBLE;
-
-        List<Room> availableRooms = hotel.getAvailableRooms();
-        Room selectedRoom = findAvailableRoom(availableRooms, roomType);
-
-        if (selectedRoom != null) {
-            System.out.print("Podaj liczbę nocy: ");
-            int numberOfNights = scanner.nextInt();
-
-            Parking parking = new Parking(false);
-            parking.askForParking(scanner);
-
-            Reservation reservation = new Reservation(guest, selectedRoom, numberOfNights, parking);
-
-            addAdditionalServices(reservation, scanner);
-
-            hotelManager.makeReservation(reservation);
-
-            double totalPrice = reservation.calculateTotalPrice();
-            System.out.println("Całkowita cena rezerwacji: " + totalPrice + " zł");
+        if (isValidName(name) && isValidAddress(address)) {
+            Guest newGuest = new Guest(name, address);
+            guestList.addGuest(newGuest);
+            System.out.println("Nowy gość dodany do listy.");
         } else {
-            System.out.println("Brak dostępnych pokoi tego rodzaju.");
+            System.out.println("Błąd: Nieprawidłowe imię lub adres. Nie dodano nowego gościa.");
         }
+    }
 
-        scanner.close();
+    private static void makeReservation(Scanner scanner, Hotel hotel, HotelManager hotelManager, GuestList guestList) {
+        System.out.print("Podaj imię gościa: ");
+        String guestName = scanner.next();
+        Guest guest = guestList.findGuestByName(guestName);
+
+        if (guest != null) {
+            System.out.print("Wybierz rodzaj pokoju (1 - jednoosobowy, 2 - dwuosobowy): ");
+            int roomChoice = scanner.nextInt();
+            RoomType roomType = (roomChoice == 1) ? RoomType.SINGLE : RoomType.DOUBLE;
+
+            List<Room> availableRooms = hotel.getAvailableRooms();
+            Room selectedRoom = findAvailableRoom(availableRooms, roomType);
+
+            if (selectedRoom != null) {
+                System.out.print("Podaj liczbę nocy: ");
+                int numberOfNights = scanner.nextInt();
+
+                Parking parking = new Parking(false);
+                parking.askForParking(scanner);
+
+                Reservation reservation = new Reservation(guest, selectedRoom, numberOfNights, parking);
+
+                addAdditionalServices(reservation, scanner);
+
+                hotelManager.makeReservation(reservation);
+
+                guest.setReservation(reservation);
+
+                displayGuestDetails(guest, reservation);
+            } else {
+                System.out.println("Brak dostępnych pokoi tego rodzaju.");
+            }
+        } else {
+            System.out.println("Nie znaleziono gościa o podanym imieniu.");
+        }
+    }
+
+    private static void modifyOrRemoveGuest(Scanner scanner, GuestList guestList) {
+        System.out.println("---------------------------------");
+        System.out.println("Menu modyfikacji/usuwania/dodawania gościa:");
+        System.out.println("1. Znajdź gościa do modyfikacji");
+        System.out.println("2. Usuń gościa");
+        System.out.println("3. Dodaj nowego gościa");
+        System.out.println("0. Powrót do głównego menu");
+        System.out.println("---------------------------------");
+
+        System.out.print("Wybierz opcję: ");
+        int modifyOrRemoveChoice = scanner.nextInt();
+
+        switch (modifyOrRemoveChoice) {
+            case 1:
+                modifyGuest(scanner, guestList);
+                break;
+            case 2:
+                removeGuest(scanner, guestList);
+                break;
+            case 3:
+                addNewGuest(scanner, guestList);
+                break;
+            case 0:
+                break;
+            default:
+                System.out.println("Nieprawidłowa opcja. Spróbuj ponownie.");
+        }
+    }
+
+    private static void modifyGuest(Scanner scanner, GuestList guestList) {
+        System.out.print("Podaj imię gościa do modyfikacji: ");
+        String guestName = scanner.next();
+        Guest existingGuest = guestList.findGuestByName(guestName);
+
+        if (existingGuest != null) {
+            System.out.print("Podaj nowe imię: ");
+            String newName = enterName(scanner);
+
+            System.out.print("Podaj nowy adres: ");
+            String newAddress = enterAddress(scanner);
+
+            if (isValidName(newName) && isValidAddress(newAddress)) {
+                existingGuest.setName(newName);
+                existingGuest.setAddress(newAddress);
+                System.out.println("Dane gościa zostały zaktualizowane.");
+            } else {
+                System.out.println("Nieprawidłowe imię lub adres. Dane gościa nie zostały zaktualizowane.");
+            }
+        } else {
+            System.out.println("Nie znaleziono gościa o podanym imieniu.");
+        }
+    }
+
+    private static void removeGuest(Scanner scanner, GuestList guestList) {
+        System.out.print("Podaj imię gościa do usunięcia: ");
+        String guestName = scanner.next();
+        Guest guestToRemove = guestList.findGuestByName(guestName);
+
+        if (guestToRemove != null) {
+            guestList.removeGuest(guestToRemove);
+            System.out.println("Gość został usunięty z listy.");
+        } else {
+            System.out.println("Nie znaleziono gościa o podanym imieniu.");
+        }
+    }
+
+    private static void displayGuestList(GuestList guestList) {
+        System.out.println("Lista gości:");
+        for (Guest guest : guestList.getGuests()) {
+            System.out.println("Imię: " + guest.getName() + ", Adres: " + guest.getAddress());
+
+            Reservation guestReservation = guest.getReservation();
+            if (guestReservation != null) {
+                displayGuestDetails(guest, guestReservation);
+            } else {
+                System.out.println("Brak dostępnej rezerwacji.");
+            }
+
+            System.out.println();
+        }
     }
 
     private static String enterName(Scanner scanner) {
-        System.out.print("Podaj swoje imię: ");
-        while (!scanner.hasNext("[A-Za-z]+")) {
-            System.out.println("Nieprawidłowe imię. Spróbuj ponownie.");
-            System.out.print("Podaj swoje imię: ");
-            scanner.next();
-        }
+        System.out.print("Podaj imię: ");
         return scanner.next();
     }
 
     private static String enterAddress(Scanner scanner) {
-        System.out.print("Podaj swój adres: ");
-        while (!scanner.hasNext("[A-Za-z0-9\\s]+")) {
-            System.out.println("Nieprawidłowy adres. Spróbuj ponownie.");
-            System.out.print("Podaj swój adres: ");
-            scanner.next();
-        }
+        System.out.print("Podaj adres: ");
         return scanner.next();
+    }
+
+    private static boolean isValidName(String name) {
+        return name.matches("[a-zA-ZęóąśłżźćńĘÓĄŚŁŻŹĆŃ]+");
+    }
+
+    private static boolean isValidAddress(String address) {
+        return address.matches("[a-zA-Z0-9ęóąśłżźćńĘÓĄŚŁŻŹĆŃ ]+");
     }
 
     private static Room findAvailableRoom(List<Room> availableRooms, RoomType roomType) {
@@ -98,5 +258,24 @@ public class HotelManagementSystem {
                     System.out.println("Nieprawidłowy wybór. Spróbuj ponownie.");
             }
         }
+    }
+
+    private static void displayGuestDetails(Guest guest, Reservation reservation) {
+        System.out.println("Pokój: " + reservation.getRoom().getRoomNumber());
+        System.out.println("Rodzaj pokoju: " + reservation.getRoom().getRoomType());
+        System.out.println("Ilość nocy: " + reservation.getNumberOfNights());
+        System.out.println("Cena rezerwacji: " + reservation.calculateTotalPrice() + " zł");
+
+        List<RoomService> roomServices = reservation.getRoomServices();
+        if (!roomServices.isEmpty()) {
+            System.out.println("Dodatkowe usługi:");
+            for (RoomService service : roomServices) {
+                System.out.println("- " + service.getServiceName());
+            }
+        } else {
+            System.out.println("Brak dodatkowych usług.");
+        }
+
+        System.out.println();
     }
 }

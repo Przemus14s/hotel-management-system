@@ -14,4 +14,8 @@ public class RoomService {
     public Price getPrice() {
         return price;
     }
+
+    public String getServiceName() {
+        return serviceName;
+    }
 }

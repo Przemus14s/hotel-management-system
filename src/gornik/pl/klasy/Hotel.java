@@ -10,9 +10,9 @@ public class Hotel {
     public Hotel(String name) {
         this.name = name;
         this.rooms = new ArrayList<>();
-        // Dodaj pokoje do hotelu
         this.rooms.add(new Room(1, RoomType.SINGLE));
         this.rooms.add(new Room(2, RoomType.DOUBLE));
+
 
     }
 

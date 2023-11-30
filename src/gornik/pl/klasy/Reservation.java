@@ -22,6 +22,18 @@ public class Reservation {
         return room;
     }
 
+    public int getNumberOfNights() {
+        return numberOfNights;
+    }
+
+    public Parking getParking() {
+        return parking;
+    }
+
+    public List<RoomService> getRoomServices() {
+        return roomServices;
+    }
+
     public void addRoomService(RoomService roomService) {
         roomServices.add(roomService);
     }
