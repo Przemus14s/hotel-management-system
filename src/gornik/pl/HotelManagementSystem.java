@@ -12,6 +12,8 @@ public class HotelManagementSystem {
         GuestList guestList = createGuestListWith20Guests();
 
         Scanner scanner = new Scanner(System.in);
+        System.out.println("---------------------------------");
+        System.out.println("Witaj w programie Zamku Lubelskiego");
 
         while (true) {
             System.out.println("---------------------------------");
@@ -51,40 +53,42 @@ public class HotelManagementSystem {
 
     private static GuestList createGuestListWith20Guests() {
         GuestList guestList = new GuestList();
-        guestList.addGuest(new Guest("Anna", "Gdańsk"));
-        guestList.addGuest(new Guest("Jan", "Rzeszów"));
-        guestList.addGuest(new Guest("Katarzyna", "Wrocław"));
-        guestList.addGuest(new Guest("Piotr", "Trzcina"));
-        guestList.addGuest(new Guest("Magdalena", "Zakopane"));
-        guestList.addGuest(new Guest("Grzegorz", "Warszawa"));
-        guestList.addGuest(new Guest("Agnieszka", "Kraków"));
-        guestList.addGuest(new Guest("Krzysztof", "Gniezno"));
-        guestList.addGuest(new Guest("Joanna", "Poznań"));
-        guestList.addGuest(new Guest("Marek", "Lublin"));
-        guestList.addGuest(new Guest("Ewa", "Skrzypaczowice"));
-        guestList.addGuest(new Guest("Tomasz", "Gorzyce"));
-        guestList.addGuest(new Guest("Karolina", "Koprzywnica"));
-        guestList.addGuest(new Guest("Artur", "Tarnobrzeg"));
-        guestList.addGuest(new Guest("Monika", "Zator"));
-        guestList.addGuest(new Guest("Rafał", "Krosno"));
-        guestList.addGuest(new Guest("Beata", "Izdebki"));
-        guestList.addGuest(new Guest("Wojciech", "Sokołow"));
-        guestList.addGuest(new Guest("Mariola", "Stale"));
-        guestList.addGuest(new Guest("Dariusz", "Kacperkowo"));
+        guestList.addGuest(new Guest("Anna", "Kowalska", "Gdańsk"));
+        guestList.addGuest(new Guest("Helmunda", "Nowak", "Rzeszów"));
+        guestList.addGuest(new Guest("Katarzyna", "Japko", "Trzcina"));
+        guestList.addGuest(new Guest("Piotr","Bogota", "Trzcina"));
+        guestList.addGuest(new Guest("Magdalena", "Sroka","Zakopane"));
+        guestList.addGuest(new Guest("Grzegorz", "Pęk","Warszawa"));
+        guestList.addGuest(new Guest("Agnieszka","Nowaczek", "Kraków"));
+        guestList.addGuest(new Guest("Krzysztof", "Rozpara","Gniezno"));
+        guestList.addGuest(new Guest("Joanna", "Koza","Poznań"));
+        guestList.addGuest(new Guest("Marek", "Ziemiak","Lublin"));
+        guestList.addGuest(new Guest("Ewa", "Enimem","Skrzypaczowice"));
+        guestList.addGuest(new Guest("Tomasz", "Rzepka", "Gorzyce"));
+        guestList.addGuest(new Guest("Karolina", "Arbuz", "Koprzywnica"));
+        guestList.addGuest(new Guest("Artur", "Por", "Tarnobrzeg"));
+        guestList.addGuest(new Guest("Monika", "Nowak", "Zator"));
+        guestList.addGuest(new Guest("Rafał", "Kowalski","Krosno"));
+        guestList.addGuest(new Guest("Beata", "Jelly","Izdebki"));
+        guestList.addGuest(new Guest("Wojciech", "Herbata", "Sokołow"));
+        guestList.addGuest(new Guest("Mariola", "Słowiański", "Stale"));
+        guestList.addGuest(new Guest("Dariusz", "Gońciarz", "Kacperkowo"));
 
         return guestList;
     }
 
     private static void addNewGuest(Scanner scanner, GuestList guestList) {
-        String name = enterName(scanner);
-        String address = enterAddress(scanner);
+        Guest newGuest = new Guest("", "", "");
+        newGuest.enterName(scanner);
+        newGuest.enterSurname(scanner);
+        newGuest.enterAddress(scanner);
 
-        if (isValidName(name) && isValidAddress(address)) {
-            Guest newGuest = new Guest(name, address);
+        if (newGuest.isValid()) {
             guestList.addGuest(newGuest);
             System.out.println("Nowy gość dodany do listy.");
         } else {
-            System.out.println("Błąd: Nieprawidłowe imię lub adres. Nie dodano nowego gościa.");
+            System.out.println("Błąd: Nieprawidłowe dane gościa. Nie dodano nowego gościa.");
+
         }
     }
 
@@ -105,7 +109,7 @@ public class HotelManagementSystem {
                 System.out.print("Podaj liczbę nocy: ");
                 int numberOfNights = scanner.nextInt();
 
-                Parking parking = new Parking(false);
+                Parking parking = new Parking();
                 parking.askForParking(scanner);
 
                 Reservation reservation = new Reservation(guest, selectedRoom, numberOfNights, parking);
@@ -160,18 +164,15 @@ public class HotelManagementSystem {
         Guest existingGuest = guestList.findGuestByName(guestName);
 
         if (existingGuest != null) {
-            System.out.print("Podaj nowe imię: ");
-            String newName = enterName(scanner);
+            System.out.println("[Nowe]");
+            existingGuest.enterName(scanner);
+            existingGuest.enterSurname(scanner);
+            existingGuest.enterAddress(scanner);
 
-            System.out.print("Podaj nowy adres: ");
-            String newAddress = enterAddress(scanner);
-
-            if (isValidName(newName) && isValidAddress(newAddress)) {
-                existingGuest.setName(newName);
-                existingGuest.setAddress(newAddress);
+            if (existingGuest.isValid()) {
                 System.out.println("Dane gościa zostały zaktualizowane.");
             } else {
-                System.out.println("Nieprawidłowe imię lub adres. Dane gościa nie zostały zaktualizowane.");
+                System.out.println("Nieprawidłowe dane gościa. Dane gościa nie zostały zaktualizowane.");
             }
         } else {
             System.out.println("Nie znaleziono gościa o podanym imieniu.");
@@ -194,7 +195,7 @@ public class HotelManagementSystem {
     private static void displayGuestList(GuestList guestList) {
         System.out.println("Lista gości:");
         for (Guest guest : guestList.getGuests()) {
-            System.out.println("Imię: " + guest.getName() + ", Adres: " + guest.getAddress());
+            System.out.println("Imię: " + guest.getName() + " Nazwisko: " + guest.getSurname() + ", Adres: " + guest.getAddress());
 
             Reservation guestReservation = guest.getReservation();
             if (guestReservation != null) {
@@ -205,24 +206,6 @@ public class HotelManagementSystem {
 
             System.out.println();
         }
-    }
-
-    private static String enterName(Scanner scanner) {
-        System.out.print("Podaj imię: ");
-        return scanner.next();
-    }
-
-    private static String enterAddress(Scanner scanner) {
-        System.out.print("Podaj adres: ");
-        return scanner.next();
-    }
-
-    private static boolean isValidName(String name) {
-        return name.matches("[a-zA-ZęóąśłżźćńĘÓĄŚŁŻŹĆŃ]+");
-    }
-
-    private static boolean isValidAddress(String address) {
-        return address.matches("[a-zA-Z0-9ęóąśłżźćńĘÓĄŚŁŻŹĆŃ ]+");
     }
 
     private static Room findAvailableRoom(List<Room> availableRooms, RoomType roomType) {
@@ -236,8 +219,10 @@ public class HotelManagementSystem {
 
     private static void addAdditionalServices(Reservation reservation, Scanner scanner) {
         System.out.println("Dostępne dodatkowe usługi:");
-        System.out.println("1. Jedzenie (200 zł za noc)");
-        System.out.println("2. Masaż (200 zł za noc)");
+        System.out.println("1. Jedzenie (Cena 150 zł)");
+        System.out.println("2. Masaż (Cena 150 zł)");
+        System.out.println("3. Przechowalnia bagażu (Cena 150 zł)");
+        System.out.println("4. Barek (Cena 150 zł)");
 
         boolean continueAddingServices = true;
         while (continueAddingServices) {
@@ -250,6 +235,12 @@ public class HotelManagementSystem {
                     break;
                 case 2:
                     reservation.addRoomService(new RoomService("Masaż"));
+                    break;
+                case 3:
+                    reservation.addRoomService(new RoomService("Przechowalnia bagażu"));
+                    break;
+                case 4:
+                    reservation.addRoomService(new RoomService("Barek"));
                     break;
                 case 0:
                     continueAddingServices = false;

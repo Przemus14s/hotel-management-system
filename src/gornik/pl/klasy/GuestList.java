@@ -31,4 +31,12 @@ public class GuestList {
         return null;
     }
 
+    public Guest findGuestByNameAndSurname(String name, String surname) {
+        for (Guest guest : guests) {
+            if (guest.getName().equals(name) && guest.getSurname().equals(surname)) {
+                return guest;
+            }
+        }
+        return null;
+    }
 }
