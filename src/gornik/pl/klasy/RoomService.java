@@ -1,7 +1,7 @@
 package gornik.pl.klasy;
 
 public class RoomService {
-    public static final Price DEFAULT_PRICE = new Price(200.0);
+    public static final Price DEFAULT_PRICE = new Price(150.0);
 
     private String serviceName;
     private Price price;

@@ -12,6 +12,8 @@ public class HotelManagementSystem {
         GuestList guestList = createGuestListWith20Guests();
 
         Scanner scanner = new Scanner(System.in);
+        System.out.println("---------------------------------");
+        System.out.println("Witaj w programie Zamku Lubelskiego");
 
         while (true) {
             System.out.println("---------------------------------");
@@ -52,7 +54,7 @@ public class HotelManagementSystem {
     private static GuestList createGuestListWith20Guests() {
         GuestList guestList = new GuestList();
         guestList.addGuest(new Guest("Anna", "Gdańsk"));
-        guestList.addGuest(new Guest("Jan", "Rzeszów"));
+        guestList.addGuest(new Guest("Helmunda", "Rzeszów"));
         guestList.addGuest(new Guest("Katarzyna", "Wrocław"));
         guestList.addGuest(new Guest("Piotr", "Trzcina"));
         guestList.addGuest(new Guest("Magdalena", "Zakopane"));
@@ -160,10 +162,10 @@ public class HotelManagementSystem {
         Guest existingGuest = guestList.findGuestByName(guestName);
 
         if (existingGuest != null) {
-            System.out.print("Podaj nowe imię: ");
+            System.out.println("[Nowe]");
             String newName = enterName(scanner);
 
-            System.out.print("Podaj nowy adres: ");
+
             String newAddress = enterAddress(scanner);
 
             if (isValidName(newName) && isValidAddress(newAddress)) {
@@ -236,8 +238,10 @@ public class HotelManagementSystem {
 
     private static void addAdditionalServices(Reservation reservation, Scanner scanner) {
         System.out.println("Dostępne dodatkowe usługi:");
-        System.out.println("1. Jedzenie (200 zł za noc)");
-        System.out.println("2. Masaż (200 zł za noc)");
+        System.out.println("1. Jedzenie (Cena 150 zł)");
+        System.out.println("2. Masaż (Cena 150 zł)");
+        System.out.println("3. Przechowalnia bagażu (Cena 150 zł)");
+        System.out.println("4. Barek (Cena 150 zł)");
 
         boolean continueAddingServices = true;
         while (continueAddingServices) {
@@ -250,6 +254,12 @@ public class HotelManagementSystem {
                     break;
                 case 2:
                     reservation.addRoomService(new RoomService("Masaż"));
+                    break;
+                case 3:
+                    reservation.addRoomService(new RoomService("Przechowalnia bagażu"));
+                    break;
+                case 4:
+                    reservation.addRoomService(new RoomService("Barek"));
                     break;
                 case 0:
                     continueAddingServices = false;
